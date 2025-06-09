@@ -123,5 +123,36 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Restoran getRestoran() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_RESTORAN + " LIMIT 1", null);
+
+        Restoran restoran = null;
+
+        if (cursor.moveToFirst()) {
+            restoran = new Restoran();
+            restoran.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            restoran.setRestoran(cursor.getString(cursor.getColumnIndexOrThrow("restoran")));
+            restoran.setKontak(cursor.getString(cursor.getColumnIndexOrThrow("kontak")));
+            restoran.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
+            restoran.setOwner(cursor.getString(cursor.getColumnIndexOrThrow("owner")));
+            restoran.setMeja(cursor.getInt(cursor.getColumnIndexOrThrow("meja")));
+            restoran.setAlamat(cursor.getString(cursor.getColumnIndexOrThrow("alamat")));
+            restoran.setKelurahan_id(cursor.getString(cursor.getColumnIndexOrThrow("kelurahan_id")));
+            restoran.setKecamatan_id(cursor.getString(cursor.getColumnIndexOrThrow("kecamatan_id")));
+            restoran.setKabupaten_id(cursor.getString(cursor.getColumnIndexOrThrow("kabupaten_id")));
+            restoran.setProvinsi_id(cursor.getString(cursor.getColumnIndexOrThrow("provinsi_id")));
+            restoran.setJam_buka(cursor.getString(cursor.getColumnIndexOrThrow("jam_buka")));
+            restoran.setJam_tutup(cursor.getString(cursor.getColumnIndexOrThrow("jam_tutup")));
+            restoran.setLogo(cursor.getString(cursor.getColumnIndexOrThrow("logo")));
+            restoran.setStatus(cursor.getString(cursor.getColumnIndexOrThrow("status")));
+        }
+
+        cursor.close();
+        db.close();
+        return restoran;
+    }
+
+
 
 }

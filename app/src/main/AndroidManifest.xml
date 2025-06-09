@@ -32,6 +32,9 @@
         android:theme="@style/Theme.Kasir"
         tools:targetApi="31">
         <activity
+            android:name=".transaksi.OrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".dashboard.DaftarMejaWaitersActivity"
             android:exported="false" />
         <activity
