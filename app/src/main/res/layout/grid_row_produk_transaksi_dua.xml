@@ -77,7 +77,7 @@
                                 android:textSize="14sp"
                                 android:text="Jenis Menu"
                                 android:textColor="@color/text_color"
-                                android:id="@+id/tvBarcode"/>
+                                android:id="@+id/tvKategori"/>
                         </LinearLayout>
 
                         <LinearLayout

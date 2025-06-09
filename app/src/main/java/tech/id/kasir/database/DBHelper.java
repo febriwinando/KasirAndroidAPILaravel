@@ -5,7 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.util.List;
+
+import tech.id.kasir.response_api.Menu;
 import tech.id.kasir.response_api.Pengguna;
 import tech.id.kasir.response_api.Restoran;
 
@@ -171,6 +175,52 @@ public class DBHelper extends SQLiteOpenHelper {
         return restoran;
     }
 
+
+    public void insertMenus(List<Menu> menuList) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            for (Menu menu : menuList) {
+                ContentValues values = new ContentValues();
+                values.put("id", menu.getId());
+                values.put("nama_produk", menu.getNama_produk());
+                values.put("kategori_id", menu.getKategori_id());
+                Log.d("kategori_nama", menu.getKategori().getNama_kategori());
+
+                // Cek null untuk kategori
+                if (menu.getKategori() != null) {
+                    values.put("kategori_nama", menu.getKategori().getNama_kategori());
+                } else {
+                    values.put("kategori_nama", "");
+                }
+
+                values.put("harga", menu.getHarga());
+                values.put("stok", menu.getStok());
+                values.put("deskripsi", menu.getDeskripsi());
+                values.put("gambar", menu.getGambar());
+                values.put("status", menu.getStatus());
+
+                // Gunakan replace untuk overwrite jika id sudah ada
+                db.insertWithOnConflict(TABLE_MENU, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public void deleteAllMenus() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_MENU, null, null);
+        db.close();
+    }
+
+    public Cursor getMenus() {
+        SQLiteDatabase db = this.getReadableDatabase(); // lebih baik untuk SELECT
+        return db.rawQuery("SELECT * FROM " + TABLE_MENU, null);
+    }
 
 
 
