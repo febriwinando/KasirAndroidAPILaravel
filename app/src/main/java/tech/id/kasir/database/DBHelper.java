@@ -16,6 +16,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_PENGGUNA = "pengguna";
     public static final String TABLE_RESTORAN = "restoran";
+    public static final String TABLE_MENU = "menus";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,12 +55,29 @@ public class DBHelper extends SQLiteOpenHelper {
                 + "status TEXT"
                 + ")";
         db.execSQL(CREATE_RESTORAN_TABLE);
+
+
+        String CREATE_TABLE_MENU = "CREATE TABLE "+ TABLE_MENU+" (" +
+                "id INTEGER PRIMARY KEY, " +
+                "nama_produk TEXT, " +
+                "kategori_id INTEGER, " +
+                "kategori_nama TEXT, " +
+                "harga TEXT, " +
+                "stok INTEGER, " +
+                "deskripsi TEXT, " +
+                "gambar TEXT, " +
+                "status TEXT)";
+
+        db.execSQL(CREATE_TABLE_MENU);
+
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PENGGUNA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESTORAN);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MENU);
 
         onCreate(db);
     }
@@ -152,6 +170,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return restoran;
     }
+
+
 
 
 

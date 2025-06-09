@@ -6,6 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Field;
 import retrofit2.http.Path;
+import tech.id.kasir.response_api.MenuResponse;
 import tech.id.kasir.response_api.RestoranResponse;
 import tech.id.kasir.response_api.login;
 
@@ -21,5 +22,10 @@ public interface api_transakasi_data {
 
     @GET("restoran/{id}")
     Call<RestoranResponse> getRestoran(@Path("id") int restoranId);
+
+
+    @GET("menus")
+    Call<MenuResponse> getMenus();
+
 
 }
