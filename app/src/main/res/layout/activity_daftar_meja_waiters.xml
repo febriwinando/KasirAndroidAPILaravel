@@ -11,8 +11,8 @@ tools:context=".dashboard.DaftarMejaWaitersActivity">
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -23,6 +23,7 @@ tools:context=".dashboard.DaftarMejaWaitersActivity">
         android:id="@+id/layoutHeader"
         >
         <ImageView
+            android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -30,42 +31,18 @@ tools:context=".dashboard.DaftarMejaWaitersActivity">
             android:id="@+id/kembaliDariDaftarMeja"
             app:tint="@color/color4"/>
         <TextView
+            android:layout_toEndOf="@id/kembaliDariDaftarMeja"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="@color/font_side"
-            android:text="Daftar meja"/>
-    </LinearLayout>
+            android:text="Daftar meja"
+            android:id="@+id/tvKembaliDariDaftarKerja"/>
 
-    <TextView
-        android:id="@+id/tvNotifMejaKosong"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Tidak Tersedia Daftar Meja"
-        android:textAlignment="center"
-        android:visibility="gone"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDaftarMeja"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutHeader"
-        android:layout_above="@+id/layoutbtm"
-        tools:listitem="@layout/list_daftar_meja"
-        />
-
-
-    <RelativeLayout
-        android:padding="10dp"
-        android:id="@+id/layoutbtm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
         <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/tvKembaliDariDaftarKerja"
             style="@style/LoginTextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,6 +74,30 @@ tools:context=".dashboard.DaftarMejaWaitersActivity">
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvNotifMejaKosong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Tidak Tersedia Daftar Meja"
+        android:textAlignment="center"
+        android:visibility="gone"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDaftarMeja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutHeader"
+        android:layout_above="@+id/layoutbtm"
+        tools:listitem="@layout/list_daftar_meja"
+        />
+
+
+
 
 </RelativeLayout>
 
