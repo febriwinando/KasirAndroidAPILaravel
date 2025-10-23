@@ -1,5 +1,7 @@
 package tech.id.kasir.login;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -29,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import tech.id.kasir.R;
 import tech.id.kasir.api.RetrofitClient;
+import tech.id.kasir.dashboard.BerandaActivity;
 import tech.id.kasir.dashboard.DaftarMejaWaitersActivity;
 import tech.id.kasir.database.DBHelper;
 import tech.id.kasir.response_api.Pengguna;
@@ -57,7 +60,7 @@ public class MasukActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(this);
         if (dbHelper.isUserLoggedIn()) {
-            startActivity(new Intent(this, DaftarMejaWaitersActivity.class));
+            startActivity(new Intent(this, BerandaActivity.class));
             finish();
         }
 
@@ -108,7 +111,7 @@ public class MasukActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(this);
         if (dbHelper.isUserLoggedIn()) {
-            startActivity(new Intent(this, DaftarMejaWaitersActivity.class));
+            startActivity(new Intent(this, BerandaActivity.class));
             finish();
         }
     }

@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.annotations)
     implementation(libs.glide)
     implementation(libs.google.material)
+    implementation(libs.eazegraph)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

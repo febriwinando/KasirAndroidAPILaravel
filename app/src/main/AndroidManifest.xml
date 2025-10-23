@@ -32,6 +32,12 @@
         android:theme="@style/Theme.Kasir"
         tools:targetApi="31">
         <activity
+            android:name=".pengaturan.PengaturanPerangkatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".dashboard.BerandaActivity"
+            android:exported="false" />
+        <activity
             android:name=".transaksi.TransaksiActivity"
             android:exported="false" />
         <activity
