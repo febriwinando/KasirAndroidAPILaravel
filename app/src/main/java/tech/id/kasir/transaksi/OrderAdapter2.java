@@ -9,7 +9,6 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -23,16 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import tech.id.kasir.InvoiceGenerator;
 import tech.id.kasir.R;
 import tech.id.kasir.database.DBHelper;
 import tech.id.kasir.response_api.Menu;
 
-public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHolder>{
+public class OrderAdapter2 extends  RecyclerView.Adapter<OrderAdapter2.ListViewHolder>{
+    private OnItemClickCallback onItemClickCallback;
     DBHelper dbHelper;
 //    NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
 
-    private OnItemClickCallback onItemClickCallback;
     public void setOnItemClickCallback(OnItemClickCallback onItemClickCallback) {
         this.onItemClickCallback = onItemClickCallback;
     }
@@ -41,21 +39,33 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
 //    ArrayList<ModelQty> modelQties = new ArrayList<ModelQty>();
     public static ArrayList<Menu> produks;
     private final ArrayList<Menu> produksArrayList;
+
     String statusOrder;
     String no_meja;
+
     int penggunaId;
+
+    String invoice = "123";
     String baseUrl = "http://172.15.1.202:8000/";
 
-    public OrderAdapter(ArrayList<Menu> produks, Activity context, String no_meja) {
-        OrderAdapter.produks = produks;
+    public OrderAdapter2(ArrayList<Menu> produks, Activity context, String no_meja) {
+        OrderAdapter2.produks = produks;
         this.context = context;
-        produksArrayList = new ArrayList<>(OrderAdapter.produks);
+        produksArrayList = new ArrayList<>(OrderAdapter2.produks);
         dbHelper = new DBHelper(context);
         this.no_meja = no_meja;
         Cursor dataPengguna =dbHelper.getPenggunaId();
         while (dataPengguna.moveToNext()){
             penggunaId = dataPengguna.getInt(0);
         }
+//        List<String> existingInvoices = dbHelper.getAllInvoiceNumbers();
+//        invoice = InvoiceGenerator.generateInvoiceNumber(1, 5, existingInvoices);
+//        for (int position = 0; position < produks.size(); position++) {
+//            ModelQty modelQty = new ModelQty();
+//            modelQty.setId(String.valueOf(produks.get(position).getId()));
+//            modelQty.setQty(String.valueOf(produks.get(position).getQty_produk()));
+//            modelQties.add(modelQty);
+//        }
     }
 
     @NonNull
@@ -115,8 +125,7 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
                 Cursor cursor = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
                 if (cursor.getCount() == 0){
                     statusOrder = "draf";
-                    String invoiceCode = InvoiceGenerator.generateInvoiceCode("KS");
-                    boolean order = dbHelper.insertOrder(viewProduk.getId(), penggunaId, invoiceCode, no_meja, null, "diproses", "");
+                    boolean order = dbHelper.insertOrder(viewProduk.getId(), penggunaId, invoice, no_meja, null, "diproses", "");
                     if (order){
                         Cursor cursorAktif = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
                         while (cursorAktif.moveToNext()){
@@ -128,8 +137,13 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
                     while (cursor.moveToNext()) {
                         String status = cursor.getString(6);
                         if (status.equals("diproses")){
+//                            dbHelper.addOrUpdateOrderItem(cursor.getInt(0), viewProduk.getId(), viewProduk.getNama_produk(), 1, viewProduk.getHarga(), "");
+//                            int totalJumlah = dbHelper.getTotalJumlahByMenuId(cursor.getInt(0), viewProduk.getId());
+//                            holder.tvJumlah.setText(String.valueOf(totalJumlah));
+
                             statusOrder = "diproses";
-                            dbHelper.addOrUpdateOrderItem(cursor.getInt(0), viewProduk.getId(), viewProduk.getNama_produk(), 1, viewProduk.getHarga(), "");
+                            dbHelper.insertOrderItem(cursor.getInt(0), viewProduk.getId(), viewProduk.getNama_produk(), 1, viewProduk.getHarga(), "");
+
                             int totalJumlah = dbHelper.getTotalJumlahByMenuId(cursor.getInt(0), viewProduk.getId());
                             holder.tvJumlah.setText(String.valueOf(totalJumlah));
 
@@ -141,6 +155,9 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
                         }
                     }
                 }
+
+
+
             }
         });
 
@@ -148,40 +165,41 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
             @Override
             public void onClick(View v) {
 
+//                Cursor cursor = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
+//                if (cursor.getCount() == 0){
+//                    holder.tvJumlah.setText("0");
+//                }else{
+//                    while (cursor.moveToNext()) {
+//                        String status = cursor.getString(6);
+//                        if (status.equals("diproses")){
+//                            statusOrder = "diproses";
+//                            dbHelper.insertOrderItem(cursor.getInt(0), viewProduk.getId(), viewProduk.getNama_produk(), 1, viewProduk.getHarga(), "");
+//
+//                            int totalJumlah = dbHelper.getTotalJumlahByMenuId(cursor.getInt(0), viewProduk.getId());
+//                            holder.tvJumlah.setText(String.valueOf(totalJumlah));
+//
+//                        }
+//                        else if (status.equals("selesai")) {
+//                            statusOrder = "selesai";
+//                        }else if(status.equals("dibayar")){
+//
+//                        }
+//                    }
+//                }
 
-                Cursor cursor = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
-                if (cursor.getCount() == 0){
-                    holder.tvJumlah.setText("0");
-                }else{
-                    while (cursor.moveToNext()) {
-                        Cursor cursorOrder = dbHelper.getOrdersByStatusAndMeja("diproses", no_meja);
-                        if (cursorOrder.moveToFirst()) {
-                            int orderIdAktif = cursorOrder.getInt(cursorOrder.getColumnIndexOrThrow("id"));
 
-                            dbHelper.decreaseOrRemoveOrderItem(orderIdAktif, viewProduk.getId());
-
-                            int totalJumlah = dbHelper.getTotalJumlahByMenuId(orderIdAktif, viewProduk.getId());
-                            holder.tvJumlah.setText(String.valueOf(totalJumlah));
-                        } else {
-                            Toast.makeText(context, "Belum ada pesanan aktif", Toast.LENGTH_SHORT).show();
-                        }
-                        cursorOrder.close();
-                    }
-                }
 
             }
         });
 
         holder.cvListTransaksi.setOnClickListener(v -> {
             onItemClickCallback.onItemClicked(produks.get(holder.getAdapterPosition()));
-
-        });
-
-        holder.cvListTransaksi.setOnLongClickListener(v -> {
-            if (onItemClickCallback != null) {
-                onItemClickCallback.onItemLongClicked(produks.get(holder.getAdapterPosition()));
-            }
-            return true; // penting supaya tidak tumpang tindih dengan klik biasa
+//            Cursor cursorQty = databaseKasir.getDataTambahPesananMeja(viewProduk.getId_order(), viewProduk.getNoMeja(), viewProduk.getId());
+//            if (cursorQty.getCount()>0){
+//                cursorQty.moveToNext();
+//                holder.tvJumlah.setText(cursorQty.getString(5).toString());
+//
+//            }
         });
 
     }
@@ -210,13 +228,34 @@ public class OrderAdapter extends  RecyclerView.Adapter<OrderAdapter.ListViewHol
             listHargaProduk = itemView.findViewById(R.id.listHargaProduk);
             cvListTransaksi = itemView.findViewById(R.id.cvListTransaksi);
 
+//            etJumlah.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                    Cursor cursorQty = databaseKasir.getDataProduks();
+//                    while (cursorQty.moveToNext()){
+//                        if (cursorQty.getString(0).equals(produks.get(getAdapterPosition()).getId())){
+//                            databaseKasir.updateTerimaBarang(produks.get(getAdapterPosition()).getId(), etJumlah.getText().toString().trim());
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable s) {
+//
+//                }
+//            });
+
         }
     }
 
-
     public interface OnItemClickCallback {
         void onItemClicked(Menu data);
-        void onItemLongClicked(Menu data);
     }
 
     public Filter getFilter() {

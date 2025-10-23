@@ -8,4 +8,20 @@
         <item name="cornerSize">20dp</item>
     </style>
 
+    <style name="TextLabelLunas"  >
+        <item name="android:textColorHint">@color/font_side</item>
+        <item name="colorControlActivated">@color/color2</item>
+    </style>
+
+    <style name="TextLabelHutang"  >
+        <item name="android:textColorHint">@color/font_side</item>
+        <item name="colorControlActivated">@color/color8</item>
+    </style>
+
+    <style name="DialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowBackground">#00437B94</item>
+    </style>
+
 </resources>

@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "tech.id.kasir"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "tech.id.kasir"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
