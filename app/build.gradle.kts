@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.annotations)
     implementation(libs.glide)
+    implementation(libs.google.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +26,8 @@ import android.window.OnBackInvokedDispatcher;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.os.BuildCompat;
 import androidx.core.view.ViewCompat;
@@ -32,7 +35,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -247,15 +255,71 @@ public class OrderActivity extends AppCompatActivity {
         TextInputEditText tietNote = dialogNotes.findViewById(R.id.tietNote);
         TextInputEditText tietQtyNote = dialogNotes.findViewById(R.id.tietQtyNote);
 
+        LinearLayout checkboxContainer = dialogNotes.findViewById(R.id.containerCheckbox);
+        checkboxContainer.removeAllViews();
+
+
+        String[] opsiMakanan = {"Pedas", "Tidak Pedas", "Berkuah", "Kuah Sedikit"};
+        String[] opsiMinuman = {"Dingin", "Panas", "Hangat", "Banyak Es", "Es Sedikit"};
+
+        // Pilih kategori
+        String kategori = "makanan"; // nanti bisa kamu ganti dinamis
+        String[] opsi = kategori.equals("makanan") ? opsiMakanan : opsiMinuman;
+
+        for (String label : opsi) {
+            // Gunakan ContextThemeWrapper agar style diterapkan
+            MaterialCheckBox checkBox = new MaterialCheckBox(
+                    new ContextThemeWrapper(context, R.style.CustomMaterialCheckBox), null
+            );
+            checkBox.setText(label);
+            checkBox.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            checkBox.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            ));
+            checkboxContainer.addView(checkBox);
+        }
+
+
         tvMenuName.setText(menuName);
         btnSave.setOnClickListener(v -> {
-            String note = tietNote.getText().toString().trim();
+            String noteText = tietNote.getText().toString().trim();
             int qty = Integer.parseInt(tietQtyNote.getText().toString().trim().isEmpty() ? "0" : tietQtyNote.getText().toString().trim());
 
-//          Simpan ke database
-            dbHelper.insertOrderItemDetail(orderItemId, note, qty);
+            // Kumpulkan checkbox yang dicentang
+            JSONArray checkedOptions = new JSONArray();
+            for (int i = 0; i < checkboxContainer.getChildCount(); i++) {
+                View child = checkboxContainer.getChildAt(i);
+                if (child instanceof MaterialCheckBox) {
+                    MaterialCheckBox cb = (MaterialCheckBox) child;
+                    if (cb.isChecked()) {
+                        checkedOptions.put(cb.getText().toString());
+                    }
+                }
+            }
+
+            // Gabungkan ke satu objek JSON
+            JSONObject noteObject = new JSONObject();
+            try {
+                noteObject.put("text", noteText);
+                noteObject.put("options", checkedOptions);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Simpan ke database
+            dbHelper.insertOrderItemDetail(orderItemId, noteObject.toString(), qty);
+
             dialogNotes.dismiss();
         });
+
+//        btnSave.setOnClickListener(v -> {
+//            String note = tietNote.getText().toString().trim();
+//            int qty = Integer.parseInt(tietQtyNote.getText().toString().trim().isEmpty() ? "0" : tietQtyNote.getText().toString().trim());
+//
+//            dbHelper.insertOrderItemDetail(orderItemId, note, qty);
+//            dialogNotes.dismiss();
+//        });
 
         dialogNotes.show();
     }

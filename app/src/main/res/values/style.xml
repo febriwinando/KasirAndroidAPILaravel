@@ -23,5 +23,18 @@
         <item name="android:windowMinWidthMajor">100%</item>
         <item name="android:windowBackground">#00437B94</item>
     </style>
+    <style name="CustomMaterialCheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <!-- Warna centang dan border -->
+        <item name="buttonTint">@color/temaapp</item>
+        <!-- Nonaktifkan warna default Material -->
+        <item name="useMaterialThemeColors">false</item>
+        <!-- Warna teks -->
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Spasi dan padding agar rapi -->
+        <!-- Ripple effect modern -->
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
 
 </resources>
