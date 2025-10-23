@@ -26,6 +26,7 @@ import tech.id.kasir.response_api.MenuResponse;
 public class OrderActivity2 extends AppCompatActivity {
 
     DBHelper dbHelper;
+//    public static int jumlahMenu = 0;
 //
 //
 //    static ArrayList<Integer> listIdProduk = new ArrayList<Integer>();
